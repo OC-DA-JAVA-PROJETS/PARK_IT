@@ -1,16 +1,20 @@
 package com.parkit.parkingsystem.config;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.sql.*;
 
 public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
     protected static final String DB_SCHEMA = "prod";
-    protected static final String DB_URL = "jdbc:mysql://localhost:3306/" + DB_SCHEMA;
+    protected static final String DB_URL = "jdbc:mysql://localhost:3306/test?serverTimezone=UTC" + DB_SCHEMA;
     protected static final String DB_USER = "p4";
     protected static final String DB_PASSWORD = "password";
 
