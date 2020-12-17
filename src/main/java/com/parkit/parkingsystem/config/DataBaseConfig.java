@@ -13,7 +13,7 @@ public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-    protected static final String DB_SCHEMA = "parkit";
+    protected static final String DB_SCHEMA = "prod";
     protected static final String DB_URL = "jdbc:mysql://localhost:3306/" + DB_SCHEMA + "?serverTimezone=UTC";
     protected static final String DB_USER = "p4";
     protected static final String DB_PASSWORD = "password";
