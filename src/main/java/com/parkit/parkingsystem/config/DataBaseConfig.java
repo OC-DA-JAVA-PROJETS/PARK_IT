@@ -15,8 +15,8 @@ public class DataBaseConfig {
 
     protected static final String DB_SCHEMA = "prod";
     protected static final String DB_URL = "jdbc:mysql://localhost:3306/" + DB_SCHEMA + "?serverTimezone=UTC";
-    protected static final String DB_USER = "p4";
-    protected static final String DB_PASSWORD = "password";
+    protected static final String DB_USER = "root";
+    protected static final String DB_PASSWORD = "rootroot";
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
 	logger.info("Create DB connection");
