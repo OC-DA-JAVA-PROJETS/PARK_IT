@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingDataBaseIT {
+class ParkingDataBaseIT {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
@@ -27,7 +27,7 @@ public class ParkingDataBaseIT {
     private static InputReaderUtil inputReaderUtil;
 
     @BeforeAll
-    private static void setUp() throws Exception{
+    private static void setUp(){
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
@@ -48,14 +48,14 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingACar(){
+    void testParkingACar(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+        //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
     }
 
     @Test
-    public void testParkingLotExit(){
+    void testParkingLotExit(){
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
