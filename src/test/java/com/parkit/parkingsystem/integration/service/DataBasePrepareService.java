@@ -27,4 +27,13 @@ public class DataBasePrepareService {
     }
 
 
+    public boolean ticketExists() {
+        //TODO
+        return false;
+    }
+
+    public boolean slotAvailable() {
+        //TODO
+        return true;
+    }
 }
