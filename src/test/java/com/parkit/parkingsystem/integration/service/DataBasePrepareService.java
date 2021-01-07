@@ -29,6 +29,11 @@ public class DataBasePrepareService {
 
     public boolean ticketExists() {
         //TODO
+        // idTarget = getIdFromTicket;
+        // SELECT * FROM ticket WHERE id = :idTarget;
+        // if rs.length > 0 then return true
+        // else return false
+
         return false;
     }
 
