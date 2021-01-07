@@ -1,25 +1,23 @@
 package com.parkit.parkingsystem;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.time.Duration;
-import java.util.Date;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
+
     private Ticket ticket;
 
     @BeforeAll
@@ -61,7 +59,7 @@ class FareCalculatorServiceTest {
     }
 
     @Test
-    void calculateFareUnkownType(){
+    void calculateFareUnknownType(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -129,8 +127,15 @@ class FareCalculatorServiceTest {
     }
     @Test
     void calculateFareCarWithLessThanThirtyMinutesParkingTime() {
-        // TODO Generate ticket with time less than 30 minutes
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  28 * 60 * 1000) );
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
         // TODO Check if ticket price is free
+
     }
 
 }

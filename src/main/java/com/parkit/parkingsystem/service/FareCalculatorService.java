@@ -13,7 +13,7 @@ public class FareCalculatorService {
         long inTime = ticket.getInTime().getTime(); // Time in milliseconds
         long outTime = ticket.getOutTime().getTime(); // Time in milliseconds
 
-        double durationTime = outTime - inTime;
+        double durationTime = (double) outTime - (double) inTime;
         // milliseconds - (/1000) -> seconds - (/60) -> minutes - (/60) -> hours
         double duration = ((durationTime / 1000) / 60) / 60;
 
@@ -26,7 +26,7 @@ public class FareCalculatorService {
                 ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                 break;
             default:
-                throw new IllegalArgumentException("Unkown Parking Type");
+                throw new IllegalArgumentException("Unknown Parking Type");
         }
     }
 }
