@@ -2,27 +2,53 @@ package com.parkit.parkingsystem;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.ParkingSpotDAO;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
+import com.parkit.parkingsystem.service.ParkingService;
+import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
+
+    private static ParkingService parkingService;
+
+    private static ParkingSpotDAO parkingSpotDAO;
+
+    private static TicketDAO ticketDAO;
+
+    private static DataBaseTestConfig dataBaseTestConfig;
+
+    @Mock
+    private static InputReaderUtil inputReaderUtil;
 
     private Ticket ticket;
 
     @BeforeAll
     private static void setUp() {
         fareCalculatorService = new FareCalculatorService();
+        parkingSpotDAO = new ParkingSpotDAO();
+        ticketDAO = new TicketDAO();
+        dataBaseTestConfig = new DataBaseTestConfig();
+        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+        ticketDAO.dataBaseConfig = dataBaseTestConfig;
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        inputReaderUtil = new InputReaderUtil();
     }
 
     @BeforeEach
@@ -140,25 +166,28 @@ class FareCalculatorServiceTest {
         // TEST
         fareCalculatorService.calculateFare(ticket);
         // POST CONDITION(S)
-        assertEquals( (0 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals( 0 , ticket.getPrice());
     }
+
     @Test
-    void calculateFivePerCentDiscountForRecuringUsers(){
+    void calculateFivePerCentDiscountForRecuringUsers() throws Exception {
         // PRE CONDITION(S)
-        // TODO enter a license plate number "AZERTY"
-
-        // TEST 1
-        // TODO check previously enter " AZERTY" in DB
-
-        // STEP 1 CONDITION(s)
-        // TODO display message "Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."
-
-        // TEST 2
-        // TODO go out with "AZERTY"
-
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("AZERTY");
+        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - 60 * 60 * 1000 ); // 1 hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        ticket.setVehicleRegNumber("AZERTY");
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        // TEST :
+        fareCalculatorService.calculateFare(ticket);
         // POST CONDITION(S)
-        // TODO 5% discount on the normal fee on ticket
-
+        assertEquals( ( 1 * Fare.CAR_RATE_PER_HOUR * 0.95) , ticket.getPrice()); // 1 hour multiply by rate per hour, minus 5%
     }
 
 }
