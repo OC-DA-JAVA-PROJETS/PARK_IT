@@ -128,7 +128,7 @@ class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
     @Test
-    void calculateFareCarWithLessThanThirtyMinutesParkingTime() {
+    void calculateFareVehicleWithLessThanThirtyMinutesParkingTime() {
         // PRE CONDITION(S)
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  28 * 60 * 1000) );
@@ -138,9 +138,27 @@ class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         // TEST
-        fareCalculatorService.calculateFare(ticket); // FIXME - Test KO
+        fareCalculatorService.calculateFare(ticket);
         // POST CONDITION(S)
         assertEquals( (0 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+    }
+    @Test
+    void calculateFivePerCentDiscountForRecuringUsers(){
+        // PRE CONDITION(S)
+        // TODO enter a license plate number "AZERTY"
+
+        // TEST 1
+        // TODO check previously enter " AZERTY" in DB
+
+        // STEP 1 CONDITION(s)
+        // TODO display message "Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."
+
+        // TEST 2
+        // TODO go out with "AZERTY"
+
+        // POST CONDITION(S)
+        // TODO 5% discount on the normal fee on ticket
+
     }
 
 }
