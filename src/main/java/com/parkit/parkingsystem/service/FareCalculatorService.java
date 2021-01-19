@@ -17,6 +17,9 @@ public class FareCalculatorService {
         // milliseconds - (/1000) -> seconds - (/60) -> minutes - (/60) -> hours
         double duration = ((durationTime / 1000) / 60) / 60;
 
+        // TODO Externaliser du switch le calcul du prix
+        // TODO Ajouter la promotion dans le prix
+
         if (duration < 0.5) {
             ticket.setPrice(0);
         } else {
