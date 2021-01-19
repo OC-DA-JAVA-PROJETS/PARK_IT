@@ -174,23 +174,22 @@ class FareCalculatorServiceTest {
 
     @Test
     void calculateFivePerCentDiscountForRecuringUsers() throws Exception {
+        int hours = 1;
+        int discount = 5;
         // PRE CONDITION(S)
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("AZERTY");
-        parkingService.processIncomingVehicle();
-        parkingService.processExitingVehicle();
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - 60 * 60 * 1000 ); // 1 hour
+        inTime.setTime( System.currentTimeMillis() - 60 * 60 * 1000 * hours); // 1 hour
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         ticket.setVehicleRegNumber("AZERTY");
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+        ticket.setDiscount(discount);
         // TEST :
         fareCalculatorService.calculateFare(ticket);
         // POST CONDITION(S)
-        assertEquals( ( 1 * Fare.CAR_RATE_PER_HOUR * 0.95) , ticket.getPrice()); // 1 hour multiply by rate per hour, minus 5%
+        assertEquals( ( hours * Fare.CAR_RATE_PER_HOUR * (1 - 0.01 * discount) ) , ticket.getPrice()); // 1 hour multiply by rate per hour, minus 5%
     }
 
 }
