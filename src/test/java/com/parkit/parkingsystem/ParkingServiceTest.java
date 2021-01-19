@@ -58,5 +58,16 @@ class ParkingServiceTest {
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
 
+    @Test
+    void processIncomingVehicleWithDiscount() {
+        // TODO conditions avant le test
+        // similer la présence d'au moins 1 ticket dans la BDD
+
+        // Le test en lui-même, ça, on le laisse tel quel
+        parkingService.processIncomingVehicle();
+
+        // TODO conditions après le test (les asserts)
+        // vérifier que dans le ticket, il y ait bien le discount de 5%
+    }
 
 }
