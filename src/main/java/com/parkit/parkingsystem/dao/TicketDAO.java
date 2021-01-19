@@ -18,6 +18,7 @@ public class TicketDAO {
     private static final Logger logger = LogManager.getLogger("TicketDAO");
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    private Ticket ticket;
 
     public boolean saveTicket(Ticket ticket){
         Connection con = null;
@@ -85,5 +86,10 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+
+    public int countByVehicleRegNumber() {
+        // TODO
+        return 0;
     }
 }

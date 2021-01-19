@@ -70,6 +70,7 @@ class ParkingServiceTest {
                 .thenReturn(true);
         // PRE CONDITION(S)
         // TODO simuler la présence d'au moins 1 ticket dans la BDD
+        when(ticketDAO.countByVehicleRegNumber()).thenReturn(1);
         // TEST
         parkingService.processIncomingVehicle();
         // POST CONDITION(S)
@@ -83,7 +84,7 @@ class ParkingServiceTest {
                 .then(mockData->getTicketFromMockData(mockData))
                 .thenReturn(true);
         // PRE CONDITION(S)
-        // TODO simuler l'absence de tout ticket dans la BDD
+        when(ticketDAO.countByVehicleRegNumber()).thenReturn(0);
         // TEST
         parkingService.processIncomingVehicle();
         // POST CONDITION(S)
