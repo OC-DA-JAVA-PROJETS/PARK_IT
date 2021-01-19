@@ -7,11 +7,13 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
@@ -29,6 +31,8 @@ class ParkingServiceTest {
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
+
+    private Ticket ticket;
 
     @BeforeEach
     private void setUpPerTest() {
@@ -60,14 +64,35 @@ class ParkingServiceTest {
 
     @Test
     void processIncomingVehicleWithDiscount() {
-        // TODO conditions avant le test
-        // similer la présence d'au moins 1 ticket dans la BDD
-
-        // Le test en lui-même, ça, on le laisse tel quel
+        // Bouchon pour attraper la sauvegarde en base de données d'un ticket et stocker ce ticket dans le test
+        when(ticketDAO.saveTicket(any(Ticket.class)))
+                .then(mockData->getTicketFromMockData(mockData))
+                .thenReturn(true);
+        // PRE CONDITION(S)
+        // TODO simuler la présence d'au moins 1 ticket dans la BDD
+        // TEST
         parkingService.processIncomingVehicle();
+        // POST CONDITION(S)
+        Assertions.assertEquals(5, this.ticket.getDiscount());
+    }
 
-        // TODO conditions après le test (les asserts)
-        // vérifier que dans le ticket, il y ait bien le discount de 5%
+    @Test
+    void processIncomingVehicleWithoutDiscount() {
+        // Bouchon pour attraper la sauvegarde en base de données d'un ticket et stocker ce ticket dans le test
+        when(ticketDAO.saveTicket(any(Ticket.class)))
+                .then(mockData->getTicketFromMockData(mockData))
+                .thenReturn(true);
+        // PRE CONDITION(S)
+        // TODO simuler l'absence de tout ticket dans la BDD
+        // TEST
+        parkingService.processIncomingVehicle();
+        // POST CONDITION(S)
+        Assertions.assertEquals(0, this.ticket.getDiscount());
+    }
+
+    private Object getTicketFromMockData(InvocationOnMock mockData) {
+        this.ticket = mockData.getArgument(0);
+        return null;
     }
 
 }
