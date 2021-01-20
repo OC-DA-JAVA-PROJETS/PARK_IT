@@ -2,27 +2,56 @@ package com.parkit.parkingsystem;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.ParkingSpotDAO;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
+import com.parkit.parkingsystem.service.ParkingService;
+import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
+
+    private static ParkingService parkingService;
+
+    private static ParkingSpotDAO parkingSpotDAO;
+
+    private static TicketDAO ticketDAO;
+
+    private static DataBaseTestConfig dataBaseTestConfig;
+
+    @Mock
+    private static InputReaderUtil inputReaderUtil;
 
     private Ticket ticket;
 
     @BeforeAll
     private static void setUp() {
         fareCalculatorService = new FareCalculatorService();
+        parkingSpotDAO = new ParkingSpotDAO();
+        ticketDAO = new TicketDAO();
+        dataBaseTestConfig = new DataBaseTestConfig();
+        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+        ticketDAO.dataBaseConfig = dataBaseTestConfig;
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        inputReaderUtil = new InputReaderUtil();
     }
 
     @BeforeEach
@@ -128,7 +157,7 @@ class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
     @Test
-    void calculateFareCarWithLessThanThirtyMinutesParkingTime() {
+    void calculateFareVehicleWithLessThanThirtyMinutesParkingTime() {
         // PRE CONDITION(S)
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  28 * 60 * 1000) );
@@ -138,9 +167,29 @@ class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         // TEST
-        fareCalculatorService.calculateFare(ticket); // FIXME - Test KO
+        fareCalculatorService.calculateFare(ticket);
         // POST CONDITION(S)
-        assertEquals( (0 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals( 0 , ticket.getPrice());
+    }
+
+    @Test
+    void calculateFivePerCentDiscountForRecuringUsers() throws Exception {
+        int hours = 1;
+        int discount = 5;
+        // PRE CONDITION(S)
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - 60 * 60 * 1000 * hours); // 1 hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        ticket.setVehicleRegNumber("AZERTY");
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setDiscount(discount);
+        // TEST :
+        fareCalculatorService.calculateFare(ticket);
+        // POST CONDITION(S)
+        assertEquals( ( hours * Fare.CAR_RATE_PER_HOUR * (1 - 0.01 * discount) ) , ticket.getPrice()); // 1 hour multiply by rate per hour, minus 5%
     }
 
 }
