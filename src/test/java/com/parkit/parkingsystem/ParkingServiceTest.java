@@ -83,7 +83,7 @@ class ParkingServiceTest {
                 .thenReturn(true);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(2);
         // PRE CONDITION(S)
-        when(ticketDAO.countByVehicleRegNumber()).thenReturn(1);
+        when(ticketDAO.countByVehicleRegNumber(anyString())).thenReturn(1);
         // TEST
         parkingService.processIncomingVehicle();
         // POST CONDITION(S)
@@ -100,7 +100,7 @@ class ParkingServiceTest {
                 .thenReturn(true);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(2);
         // PRE CONDITION(S)
-        when(ticketDAO.countByVehicleRegNumber()).thenReturn(0);
+        when(ticketDAO.countByVehicleRegNumber(anyString())).thenReturn(0);
         // TEST
         parkingService.processIncomingVehicle();
         // POST CONDITION(S)

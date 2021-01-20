@@ -88,7 +88,7 @@ public class TicketDAO {
         return false;
     }
 
-    public int countByVehicleRegNumber() {
+    public int countByVehicleRegNumber(String VehicleRegNumber) {
         // TODO
         return 0;
     }
