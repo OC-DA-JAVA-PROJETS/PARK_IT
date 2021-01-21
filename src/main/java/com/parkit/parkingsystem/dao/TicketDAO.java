@@ -105,6 +105,8 @@ public class TicketDAO {
         }catch (Exception ex){
             logger.error("Error counting tickets by Vehicle Reg Number",ex);
             throw new Exception("Error counting tickets by Vehicle Reg Number", ex);
+        }finally {
+            dataBaseConfig.closeConnection(dataBaseConfig.getConnection());
         }
         return result;
     }

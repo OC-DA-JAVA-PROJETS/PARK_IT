@@ -43,22 +43,23 @@ class ParkingServiceTest {
 
     @BeforeAll
     private static void setUp() {
+
         dataBasePrepareService = new DataBasePrepareService();
     }
 
     @BeforeEach
     private void setUpPerTest() {
         try {
-            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
             ticket = new Ticket();
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
+            ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
             dataBasePrepareService.clearDataBaseEntries();
         } catch (Exception e) {
             e.printStackTrace();
-            throw  new RuntimeException("Failed to set up tests");
+            throw new RuntimeException("Failed to set up tests");
         }
     }
 
@@ -78,14 +79,11 @@ class ParkingServiceTest {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
         when(ticketDAO.saveTicket(any(Ticket.class)))
-                .then(mockData->getTicketFromMockData(mockData))
+                .then(mockData -> getTicketFromMockData(mockData))
                 .thenReturn(true);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(2);
-        // PRE CONDITION(S)
         when(ticketDAO.countByVehicleRegNumber(anyString())).thenReturn(1);
-        // TEST
         parkingService.processIncomingVehicle();
-        // POST CONDITION(S)
         Assertions.assertEquals(5, this.ticket.getDiscount());
     }
 
@@ -95,14 +93,11 @@ class ParkingServiceTest {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
         when(ticketDAO.saveTicket(any(Ticket.class)))
-                .then(mockData->getTicketFromMockData(mockData))
+                .then(mockData -> getTicketFromMockData(mockData))
                 .thenReturn(true);
         when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(2);
-        // PRE CONDITION(S)
         when(ticketDAO.countByVehicleRegNumber(anyString())).thenReturn(0);
-        // TEST
         parkingService.processIncomingVehicle();
-        // POST CONDITION(S)
         Assertions.assertEquals(0, this.ticket.getDiscount());
     }
 
