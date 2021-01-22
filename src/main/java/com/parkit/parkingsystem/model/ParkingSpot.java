@@ -14,26 +14,32 @@ public class ParkingSpot {
     }
 
     public int getId() {
+
         return number;
     }
 
     public void setId(int number) {
+
         this.number = number;
     }
 
     public ParkingType getParkingType() {
+
         return parkingType;
     }
 
     public void setParkingType(ParkingType parkingType) {
+
         this.parkingType = parkingType;
     }
 
     public boolean isAvailable() {
+
         return isAvailable;
     }
 
     public void setAvailable(boolean available) {
+
         isAvailable = available;
     }
 
@@ -47,6 +53,7 @@ public class ParkingSpot {
 
     @Override
     public int hashCode() {
+
         return number;
     }
 }

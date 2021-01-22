@@ -8,12 +8,17 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+<!-- PROPERTIES -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <sonar.projectKey>OC-DA-JAVA-PROJETS_P4_PARK_IT</sonar.projectKey>
+        <sonar.organization>oc-da-java-projets</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
+<!-- DEPENDENCIES -->
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -61,6 +66,7 @@
         </dependency>
     </dependencies>
 
+<!-- BUILD & PLUGINS -->
     <build>
         <plugins>
             <plugin>
