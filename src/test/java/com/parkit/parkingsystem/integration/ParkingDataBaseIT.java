@@ -26,7 +26,7 @@ class ParkingDataBaseIT {
 
 
     @BeforeAll
-    private static void setUp() throws Exception {
+    private static void setUp() {
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
@@ -50,7 +50,7 @@ class ParkingDataBaseIT {
     void testParkingACar() {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        Assertions.assertTrue(dataBasePrepareService.ticketExists());
+        Assertions.assertTrue(dataBasePrepareService.ticketExistsForVehicleRegNumber("ABCDEF"));
         Assertions.assertFalse(dataBasePrepareService.slotAvailable());
     }
 
