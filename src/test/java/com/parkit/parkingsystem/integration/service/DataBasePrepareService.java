@@ -29,7 +29,7 @@ public class DataBasePrepareService {
         }
     }
 
-    public boolean ticketExistsForVehicleRegNumber(String vehicleRegNumber) {
+    public boolean ticketExistsForVehicleRegNumber(final String vehicleRegNumber) {
         try (Connection connection = dataBaseTestConfig.getConnection()) {
             final PreparedStatement ps = connection.prepareStatement(
                     "SELECT COUNT(*) as quantity FROM ticket WHERE ticket.VEHICLE_REG_NUMBER = ?"
@@ -47,8 +47,21 @@ public class DataBasePrepareService {
         }
     }
 
-    public boolean slotAvailable() {
-        //TODO
-        return true;
+    public boolean slotAvailable(final int parkingNumber) {
+        try (Connection connection = dataBaseTestConfig.getConnection()) {
+            final PreparedStatement ps = connection.prepareStatement(
+                    "select * from parking where PARKING_NUMBER = ?;"
+            );
+            ps.setInt(1, parkingNumber);
+            final ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("available") > 0;
+            } else {
+                throw new NoSuchElementException("Empty ResultSet");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

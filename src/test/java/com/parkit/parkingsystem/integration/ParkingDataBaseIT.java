@@ -50,8 +50,10 @@ class ParkingDataBaseIT {
     void testParkingACar() {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
+        // Cette place est celle utilisée dans le bouchon de saisie de plaque, à l'entrée d'un véhicule
         Assertions.assertTrue(dataBasePrepareService.ticketExistsForVehicleRegNumber("ABCDEF"));
-        Assertions.assertFalse(dataBasePrepareService.slotAvailable());
+        // La DB étant purgé avant, la place affectée est censé être la # 1
+        Assertions.assertFalse(dataBasePrepareService.slotAvailable(1));
     }
 
 
