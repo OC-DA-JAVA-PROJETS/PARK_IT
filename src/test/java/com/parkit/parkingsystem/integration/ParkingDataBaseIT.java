@@ -4,6 +4,7 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.*;
@@ -56,16 +57,13 @@ class ParkingDataBaseIT {
         Assertions.assertFalse(dataBasePrepareService.slotAvailable(1));
     }
 
-
     @Test
     void testParkingLotExit() {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
-        //TODO: check that the fare generated and out time are populated correctly in the database
-
-
+        // Si le véhicule est sorti, le ticket doit avoir ces 2 colonne non nulles
+        Assertions.assertTrue(dataBasePrepareService.checkPriceAndOutTimeNotNull("ABCDEF"));
     }
-
 
 }

@@ -64,4 +64,25 @@ public class DataBasePrepareService {
             return false;
         }
     }
+
+    public boolean checkPriceAndOutTimeNotNull(String parkingNumber) {
+        try (Connection connection = dataBaseTestConfig.getConnection()) {
+            final PreparedStatement ps = connection.prepareStatement(
+                    "select count(*) as quantity from ticket " +
+                            "where VEHICLE_REG_NUMBER = ? " +
+                            "and price is not null " +
+                            "and out_time is not null;"
+            );
+            ps.setString(1, parkingNumber);
+            final ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("quantity") > 0;
+            } else {
+                throw new NoSuchElementException("Empty ResultSet");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
